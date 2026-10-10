@@ -32,4 +32,4 @@ def check_inventory():
 
 
 if __name__ == "__main__":
-    app.run(port=5001)
+    app.run(port=int(os.getenv("INVENTORY_PORT", "5001")), threaded=True)

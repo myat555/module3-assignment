@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-INVENTORY_URL = os.getenv("INVENTORY_URL", "http://localhost:5001/inventory/check")
+INVENTORY_URL = os.getenv("INVENTORY_URL", "http://127.0.0.1:5001/inventory/check")
 TIMEOUT_SECONDS = float(os.getenv("INVENTORY_TIMEOUT_SECONDS", "2"))
 
 
@@ -16,6 +16,7 @@ def create_order():
     try:
         resp = requests.post(INVENTORY_URL, json=payload, timeout=TIMEOUT_SECONDS)
     except requests.exceptions.Timeout:
+        app.logger.warning("inventory call exceeded %.1fs timeout", TIMEOUT_SECONDS)
         return jsonify(error=f"inventory service timed out after {TIMEOUT_SECONDS}s"), 504
     except requests.exceptions.ConnectionError:
         return jsonify(error="inventory service unavailable"), 503
@@ -33,4 +34,4 @@ def health():
 
 
 if __name__ == "__main__":
-    app.run(port=8000, threaded=True)
+    app.run(port=int(os.getenv("ORDER_PORT", "8000")), threaded=True)
