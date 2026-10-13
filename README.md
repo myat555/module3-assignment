@@ -225,7 +225,7 @@ real    0m2.422s
 
 ### Order Service remains running after the failures
 
-Immediately after each timeout, the same Order Service process still answers health checks, and orders succeed again once Inventory is restarted without the delay.
+Immediately after each timeout, the same Order Service process still answers health checks, and orders succeed again once Inventory is restarted without the delay. Restarting the inventory service shows this after ending the 5s delay timeout.
 
 **REST Order Service** (health check right after the timeout, then a new order):
 
